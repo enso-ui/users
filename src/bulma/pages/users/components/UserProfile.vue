@@ -17,9 +17,9 @@
                 <avatar class="is-128x128"
                     :user="isSelfVisiting ? user : profile"/>
                 <div class="field is-grouped is-justify-content-center mt-3">
-                    <p class="control">
+                    <p class="control"
+                        v-if="isSelfVisiting">
                         <a class="button is-primary"
-                            v-if="isSelfVisiting"
                             @click="generateAvatar">
                             <span class="icon">
                                 <fa icon="sync-alt"/>
@@ -29,11 +29,11 @@
                             </span>
                         </a>
                     </p>
-                    <p class="control">
+                    <p class="control"
+                        v-if="isSelfVisiting">
                         <enso-uploader @upload-successful="updateAvatar"
                             :url="route('core.avatars.store')"
-                            file-key="avatar"
-                            v-if="isSelfVisiting">
+                            file-key="avatar">
                             <template #control="{ controlEvents }">
                                 <a class="button is-info"
                                     v-on="controlEvents">
@@ -48,12 +48,8 @@
                         </enso-uploader>
                     </p>
                     <p class="control"
-                        v-if="
-                            !isWebview
-                            && !isSelfVisiting
-                            && canAccess('core.impersonate.start')
-                            && !impersonating
-                        ">
+                        v-if="canAccess('core.impersonate.start')
+                            && !isWebview && !isSelfVisiting && !impersonating">
                         <a class="button is-warning"
                             @click="startImpersonating">
                             <span class="icon">
@@ -64,13 +60,13 @@
                             </span>
                         </a>
                     </p>
-                    <p class="control">
+                    <p class="control"
+                        v-if="canAccess('administration.users.edit')">
                         <a class="button is-warning"
                             @click="$router.push({
                                 name: 'administration.users.edit',
                                 params: { user: profile.id },
-                            }).catch(routerErrorHandler)"
-                            v-if="canAccess('administration.users.edit')">
+                            }).catch(routerErrorHandler)">
                             <span class="icon">
                                 <fa icon="pencil-alt"/>
                             </span>
