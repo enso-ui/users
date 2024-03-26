@@ -151,7 +151,7 @@ import { mapState, mapMutations, mapGetters } from 'vuex';
 import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
-    faUser, faUserCircle, faSyncAlt, faTrashAlt, faUpload, faSignOutAlt, faPencilAlt,
+    faUser, faUserCircle, faSyncAlt, faUpload, faPencilAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import Avatar from '@enso-ui/users/src/bulma/pages/users/components/Avatar.vue';
 import { EnsoUploader } from '@enso-ui/uploader/bulma';
@@ -159,7 +159,7 @@ import eventBus from '@enso-ui/ui/src/core/services/eventBus';
 import Divider from '@enso-ui/divider';
 import format from '@enso-ui/ui/src/modules/plugins/date-fns/format';
 
-library.add(faUser, faUserCircle, faSyncAlt, faTrashAlt, faUpload, faSignOutAlt, faPencilAlt);
+library.add(faUser, faUserCircle, faSyncAlt, faUpload, faPencilAlt);
 
 export default {
     name: 'UserProfile',
