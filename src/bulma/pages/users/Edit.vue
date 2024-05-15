@@ -5,7 +5,7 @@
                 ref="form"
                 @ready="
                     ready = true;
-                    pivotParams.userGroups.id = $refs.form.field('group_id').value;
+                    pivotParams.userGroups.id = $event.form.field('group_id').value;
                 ">
                 <template #group_id="props">
                     <form-field v-bind="props"
