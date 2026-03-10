@@ -33,20 +33,6 @@
                         v-if="!props.field.meta.hidden"/>
                 </template>
                 <template #actions-left>
-                    <div class="level-item"
-                        v-if="canAccess('administration.users.destroy')">
-                        <a class="button is-danger"
-                            @click="deletableUser = Number.parseInt($route.params.user, 10)"
-                            v-if="ready">
-                            <span class="is-hidden-mobile">
-                                {{ i18n('Delete') }}
-                            </span>
-                            <span class="icon">
-                                <fa icon="trash-alt"/>
-                            </span>
-                            <span class="is-hidden-mobile"/>
-                        </a>
-                    </div>
                     <div class="level-item">
                         <a class="button is-warning"
                             @click="$router.push({
@@ -105,10 +91,6 @@
                     </tab>
                 </template>
             </accessories>
-            <delete-modal :user-id="deletableUser"
-                @close="deletableUser = null"
-                @destroyed="navigateToIndex"
-                v-if="!!deletableUser"/>
         </div>
     </div>
 </template>
@@ -124,7 +106,6 @@ import Accessories from '@enso-ui/accessories/bulma';
 import { Tab } from '@enso-ui/tabs/bulma';
 import { mapState } from 'vuex';
 import { PasswordStrength } from '@enso-ui/auth';
-import DeleteModal from './components/DeleteModal.vue';
 import Tokens from './components/Tokens.vue';
 import Sessions from './components/Sessions.vue';
 
@@ -135,7 +116,6 @@ export default {
 
     components: {
         Accessories,
-        DeleteModal,
         EnsoForm,
         Fa,
         FormField,
@@ -153,7 +133,6 @@ export default {
     emits: ['update'],
 
     data: () => ({
-        deletableUser: null,
         ready: false,
         pivotParams: { userGroups: { id: null } },
         password: null,
@@ -174,8 +153,6 @@ export default {
 
     methods: {
         navigateToIndex() {
-            this.deletableUser = null;
-
             this.$nextTick(() => this.$router
                 .push({ name: 'administration.users.index' })
                 .catch(this.routerErrorHandler));
