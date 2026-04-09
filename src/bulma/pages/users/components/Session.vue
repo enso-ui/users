@@ -1,11 +1,11 @@
 <template>
-    <div class="box p-1 raises-on-hover mb-2">
+    <div class="box p-1 mb-2">
         <div class="level">
             <div class="level-left">
                 <div class="level-item">
                     <span class="icon is-small m-1"
                         v-tooltip="session.ipAddress">
-                        <fa icon="link"/>
+                        <fa :icon="faLink"/>
                     </span>
                     <span>{{ session.ipAddress }}</span>
                 </div>
@@ -14,7 +14,7 @@
                 <div class="level-item">
                     <span class="icon is-small mr-1"
                         v-tooltip="lastActivity(session)">
-                        <fa icon="calendar-alt"/>
+                        <fa :icon="faCalendarDays"/>
                     </span>
                     <span class="icon is-small mr-1"
                         v-tooltip="`${session.OS} version: ${session.OSVersion}`">
@@ -31,7 +31,7 @@
                             @confirm="$emit('delete')">
                             <a class="button is-naked is-small">
                                 <span class="icon">
-                                    <fa icon="trash-alt"/>
+                                    <fa :icon="faTrashCan"/>
                                 </span>
                             </a>
                         </confirmation>
@@ -44,9 +44,8 @@
 
 <script>
 import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
 import {
-    faTrashAlt, faInfoCircle, faCalendarAlt, faPencilAlt, faLink,
+    faTrashCan, faCalendarDays, faLink,
     faQuestionCircle,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -58,13 +57,6 @@ import {
 
 import Confirmation from '@enso-ui/confirmation/bulma';
 import formatDistance from '@enso-ui/ui/src/modules/plugins/date-fns/formatDistance';
-
-library.add([
-    faCalendarAlt, faInfoCircle, faPencilAlt, faTrashAlt, faLink,
-    faQuestionCircle, faWindows, faLinux, faApple, faAndroid, faChrome,
-    faOpera, faInternetExplorer, faFirefoxBrowser, faEdge, faLinux, faUbuntu,
-    faFreebsd, faSafari,
-]);
 
 export default {
     name: 'Session',
@@ -83,6 +75,9 @@ export default {
     emits: ['delete'],
 
     data: () => ({
+        faCalendarDays,
+        faLink,
+        faTrashCan,
         confirmation: false,
     }),
 
@@ -98,46 +93,46 @@ export default {
             case 'Windows NT':
             case 'WindowsPhoneOS':
             case 'WindowsMobileOS':
-                return ['fab', 'windows'];
+                return faWindows;
             case 'OS X':
             case 'iOS':
             case 'iPadOS':
             case 'Macintosh':
-                return ['fab', 'apple'];
+                return faApple;
             case 'Ubuntu':
-                return ['fab', 'ubuntu'];
+                return faUbuntu;
             case 'OpenBSD':
-                return ['fab', 'freebsd'];
+                return faFreebsd;
             case 'Debian':
             case 'Linux':
-                return ['fab', 'linux'];
+                return faLinux;
             case 'ChromeOS':
-                return ['fab', 'chrome'];
+                return faChrome;
             case 'AndroidOS':
-                return ['fab', 'android'];
+                return faAndroid;
             default:
-                return 'question-circle';
+                return faQuestionCircle;
             }
         },
         browser({ browser }) {
             switch (browser) {
             case 'Opera Mini':
             case 'Opera':
-                return ['fab', 'opera'];
+                return faOpera;
             case 'Edge':
-                return ['fab', 'edge'];
+                return faEdge;
             case 'Chrome':
-                return ['fab', 'chrome'];
+                return faChrome;
             case 'Mozilla':
             case 'Firefox':
-                return ['fab', 'firefox-browser'];
+                return faFirefoxBrowser;
             case 'Safari':
-                return ['fab', 'safari'];
+                return faSafari;
             case 'IE':
-                return ['fab', 'internet-explorer'];
+                return faInternetExplorer;
 
             default:
-                return 'question-circle';
+                return faQuestionCircle;
             }
         },
     },

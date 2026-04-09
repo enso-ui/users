@@ -1,7 +1,7 @@
 <template>
     <div class="columns is-centered">
         <div class="column is-four-fifths-desktop is-full-touch">
-            <enso-form class="box has-background-light raises-on-hover"
+            <enso-form class="box"
                 ref="form"
                 @ready="
                     ready = true;
@@ -44,7 +44,7 @@
                                 {{ i18n('Edit Person') }}
                             </span>
                             <span class="icon">
-                                <fa icon="user-tie"/>
+                                <fa :icon="faUserTie"/>
                             </span>
                             <span class="is-hidden-mobile"/>
                         </a>
@@ -58,7 +58,7 @@
                                 {{ i18n('Reset Password') }}
                             </span>
                             <span class="icon">
-                                <fa icon="redo"/>
+                                <fa :icon="faRotateRight"/>
                             </span>
                             <span class="is-hidden-mobile"/>
                         </a>
@@ -97,19 +97,16 @@
 
 <script>
 import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
 import {
-    faUserTie, faTrashAlt, faKey, faRedo,
+    faRotateRight, faUserTie,
 } from '@fortawesome/free-solid-svg-icons';
 import { EnsoForm, FormField } from '@enso-ui/forms/bulma';
 import Accessories from '@enso-ui/accessories/bulma';
 import { Tab } from '@enso-ui/tabs/bulma';
-import { mapState } from 'vuex';
 import { PasswordStrength } from '@enso-ui/auth';
+import { useStore } from '../../../utils/pinia';
 import Tokens from './components/Tokens.vue';
 import Sessions from './components/Sessions.vue';
-
-library.add(faUserTie, faTrashAlt, faKey, faRedo);
 
 export default {
     name: 'Edit',
@@ -133,6 +130,8 @@ export default {
     emits: ['update'],
 
     data: () => ({
+        faRotateRight,
+        faUserTie,
         ready: false,
         pivotParams: { userGroups: { id: null } },
         password: null,
@@ -140,7 +139,12 @@ export default {
     }),
 
     computed: {
-        ...mapState(['enums', 'user']),
+        enums() {
+            return useStore('enums').enums;
+        },
+        user() {
+            return useStore('app').user;
+        },
         canAccessSessions() {
             return this.canAccess('administration.users.sessions.index')
                 && (`${this.user.role.id}` === this.enums.roles.Admin

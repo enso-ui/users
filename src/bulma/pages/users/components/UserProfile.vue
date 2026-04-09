@@ -1,9 +1,9 @@
 <template>
-    <div class="box has-background-light p-5 raises-on-hover"
+    <div class="box p-5"
         v-if="profile">
         <h4 class="title is-4 has-text-centered">
             <span class="icon">
-                <fa icon="user"
+                <fa :icon="faUser"
                     size="xs"/>
             </span>
             {{ profile.person.name }}
@@ -19,10 +19,10 @@
                 <div class="field is-grouped is-justify-content-center mt-3">
                     <p class="control"
                         v-if="isSelfVisiting">
-                        <a class="button is-primary"
+                        <a class="button is-dark"
                             @click="generateAvatar">
                             <span class="icon">
-                                <fa icon="sync-alt"/>
+                                <fa :icon="faArrowsRotate"/>
                             </span>
                             <span>
                                 {{ i18n('Avatar') }}
@@ -35,10 +35,10 @@
                             :url="route('core.avatars.store')"
                             file-key="avatar">
                             <template #control="{ controlEvents }">
-                                <a class="button is-info"
+                                <a class="button is-dark"
                                     v-on="controlEvents">
                                     <span class="icon">
-                                        <fa icon="upload"/>
+                                        <fa :icon="faUpload"/>
                                     </span>
                                     <span>
                                         {{ i18n('Avatar') }}
@@ -50,10 +50,10 @@
                     <p class="control"
                         v-if="canAccess('core.impersonate.start')
                             && !isWebview && !isSelfVisiting && !impersonating">
-                        <a class="button is-warning"
+                        <a class="button is-dark"
                             @click="startImpersonating">
                             <span class="icon">
-                                <fa icon="user-circle"/>
+                                <fa :icon="faCircleUser"/>
                             </span>
                             <span>
                                 {{ i18n('Impersonate') }}
@@ -62,13 +62,13 @@
                     </p>
                     <p class="control"
                         v-if="canAccess('administration.users.edit')">
-                        <a class="button is-warning"
+                        <a class="button is-dark"
                             @click="$router.push({
                                 name: 'administration.users.edit',
                                 params: { user: profile.id },
                             }).catch(routerErrorHandler)">
                             <span class="icon">
-                                <fa icon="pencil-alt"/>
+                                <fa :icon="faPen"/>
                             </span>
                             <span>
                                 {{ i18n('Edit') }}
@@ -143,19 +143,16 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapGetters } from 'vuex';
 import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
 import {
-    faUser, faUserCircle, faSyncAlt, faUpload, faPencilAlt,
+    faArrowsRotate, faUpload, faUser, faCircleUser, faPen,
 } from '@fortawesome/free-solid-svg-icons';
 import Avatar from '@enso-ui/users/src/bulma/pages/users/components/Avatar.vue';
 import { EnsoUploader } from '@enso-ui/uploader/bulma';
 import eventBus from '@enso-ui/ui/src/core/services/eventBus';
 import Divider from '@enso-ui/divider';
 import format from '@enso-ui/ui/src/modules/plugins/date-fns/format';
-
-library.add(faUser, faUserCircle, faSyncAlt, faUpload, faPencilAlt);
+import { useStore } from '../../../../utils/pinia';
 
 export default {
     name: 'UserProfile',
@@ -170,14 +167,30 @@ export default {
     emits: ['start-impersonating'],
 
     data: () => ({
+        faArrowsRotate,
+        faCircleUser,
+        faPen,
+        faUpload,
+        faUser,
         profile: null,
     }),
 
     computed: {
-        ...mapState(['user', 'meta', 'enums', 'impersonating']),
-        ...mapState('auth', ['isAuth']),
-        ...mapState('layout', ['isMobile']),
-        ...mapGetters(['isWebview']),
+        user() {
+            return useStore('app').user;
+        },
+        meta() {
+            return useStore('app').meta;
+        },
+        impersonating() {
+            return useStore('app').impersonating;
+        },
+        isAuth() {
+            return useStore('auth').isAuth;
+        },
+        isWebview() {
+            return useStore('app').isWebview;
+        },
         isSelfVisiting() {
             return this.user.id === this.profile.id;
         },
@@ -190,7 +203,9 @@ export default {
     },
 
     methods: {
-        ...mapMutations(['updateAvatar']),
+        updateAvatar() {
+            useStore('app').updateAvatar();
+        },
         dateFormat(date) {
             return date
                 ? format(date, this.meta.dateFormat)

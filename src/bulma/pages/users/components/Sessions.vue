@@ -7,7 +7,7 @@
                     type="text"
                     :placeholder="i18n('Filter')">
                 <span class="icon is-small is-left">
-                    <fa icon="search"/>
+                    <fa :icon="faSearch"/>
                 </span>
                 <span class="icon is-small is-right clear-button"
                     @click="query = ''"
@@ -16,13 +16,13 @@
                 </span>
             </p>
             <p class="control">
-                <a class="button is-rounded is-small is-bold ml-2"
+                <a class="button is-rounded is-small ml-2 has-text-weight-bold"
                     @click="fetch()">
                     <span>
                         {{ i18n('Reload') }}
                     </span>
                     <span class="icon">
-                        <fa icon="sync"/>
+                        <fa :icon="faArrowsRotate"/>
                     </span>
                 </a>
             </p>
@@ -40,11 +40,8 @@
 
 <script>
 import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faPlus, faSync, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faArrowsRotate, faSearch } from '@fortawesome/free-solid-svg-icons';
 import Session from './Session.vue';
-
-library.add(faPlus, faSync, faSearch);
 
 export default {
     name: 'Sessions',
@@ -63,6 +60,8 @@ export default {
     emits: ['remove', 'update'],
 
     data: () => ({
+        faArrowsRotate,
+        faSearch,
         sessions: [],
         query: '',
         form: false,

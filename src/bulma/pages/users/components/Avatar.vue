@@ -10,7 +10,7 @@
 <script>
 import 'v-tooltip/dist/v-tooltip.css';
 import { VTooltip } from 'v-tooltip';
-import { mapState } from 'vuex';
+import { useStore } from '../../../../utils/pinia';
 
 export default {
     name: 'Avatar',
@@ -31,7 +31,9 @@ export default {
     },
 
     computed: {
-        ...mapState(['avatarKey']),
+        avatarKey() {
+            return useStore('app').avatarKey;
+        },
         label() {
             return this.tooltip
                 ? this.user.person?.appellative ?? this.user.person?.name

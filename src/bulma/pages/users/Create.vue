@@ -1,7 +1,7 @@
 <template>
-<div class="columns is-centered">
+    <div class="columns is-centered">
         <div class="column is-four-fifths-desktop is-full-touch">
-            <enso-form class="box has-background-light raises-on-hover">
+            <enso-form class="box">
                 <template #group_id="props">
                     <form-field v-bind="props"
                         @update:model-value="pivotParams.userGroups.id = $event"/>

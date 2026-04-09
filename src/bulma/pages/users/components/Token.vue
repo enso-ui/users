@@ -1,11 +1,11 @@
 <template>
-    <div class="box p-1 raises-on-hover mb-2">
+    <div class="box p-1 mb-2">
         <div class="level">
             <div class="level-left">
                 <div class="level-item">
                     <span class="icon is-small m-1"
                         v-tooltip="token.name">
-                        <fa icon="key"/>
+                        <fa :icon="faKey"/>
                     </span>
                     <span>
                         {{ token.name }}
@@ -16,7 +16,7 @@
                 <div class="level-item">
                     <span class="icon is-small"
                         v-tooltip="lastUsed(token)">
-                        <fa icon="calendar-alt"/>
+                        <fa :icon="faCalendarDays"/>
                     </span>
                     <span class="is-pulled-right is-flex">
                         <confirmation placement="top"
@@ -25,7 +25,7 @@
                             @confirm="$emit('delete')">
                             <a class="button is-naked is-small">
                                 <span class="icon">
-                                    <fa icon="trash-alt"/>
+                                    <fa :icon="faTrashCan"/>
                                 </span>
                             </a>
                         </confirmation>
@@ -38,16 +38,11 @@
 
 <script>
 import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
 import {
-    faTrashAlt, faInfoCircle, faCalendarAlt, faPencilAlt,
+    faTrashCan, faCalendarDays, faKey,
 } from '@fortawesome/free-solid-svg-icons';
 import Confirmation from '@enso-ui/confirmation/bulma';
 import formatDistance from '@enso-ui/ui/src/modules/plugins/date-fns/formatDistance';
-
-library.add([
-    faCalendarAlt, faInfoCircle, faPencilAlt, faTrashAlt,
-]);
 
 export default {
     name: 'Token',
@@ -66,6 +61,9 @@ export default {
     emits: ['delete'],
 
     data: () => ({
+        faCalendarDays,
+        faKey,
+        faTrashCan,
         confirmation: false,
     }),
 

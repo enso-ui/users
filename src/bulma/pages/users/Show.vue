@@ -1,6 +1,6 @@
 <template>
     <div class="columns is-multiline is-centered">
-        <div class="column is-two-thirds-desktop">
+        <div class="column is-two-thirds-widescreen">
             <user-profile/>
         </div>
     </div>

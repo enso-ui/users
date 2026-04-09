@@ -1,6 +1,6 @@
 <template>
     <modal>
-        <enso-form class="box has-background-light"
+        <enso-form class="box"
             v-bind="$attrs"
             disable-state/>
     </modal>

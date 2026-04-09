@@ -1,5 +1,5 @@
 <script>
-import { mapState } from 'vuex';
+import { useStore } from '../../../utils/pinia';
 
 export default {
     name: 'CoreProfileControl',
@@ -10,11 +10,6 @@ export default {
         visible: false,
     }),
 
-    computed: {
-        ...mapState(['user']),
-        ...mapState('layout', ['isTouch']),
-    },
-
     methods: {
         hide() {
             this.visible = false;
@@ -23,17 +18,22 @@ export default {
             this.visible = !this.visible;
         },
         visitProfile() {
+            const app = useStore('app');
+
             this.$router.push({
                 name: 'administration.users.show',
-                params: { user: this.user.id },
+                params: { user: app.user.id },
             }).catch(this.routerErrorHandler);
         },
     },
 
     render() {
+        const app = useStore('app');
+        const layout = useStore('layout');
+
         return this.$slots.default({
-            user: this.user,
-            isTouch: this.isTouch,
+            user: app.user,
+            isTouch: layout.isTouch,
             visitProfile: this.visitProfile,
             hide: this.hide,
             toggle: this.toggle,

@@ -2,14 +2,14 @@
     <div class="tokens-wrapper">
         <div class="field is-grouped">
             <p class="control">
-                <a class="button is-rounded is-small is-bold is-info"
+                <a class="button is-rounded is-small is-info has-text-weight-bold"
                     @click="form = true"
                     v-if="canAccess('administration.users.tokens.create')">
                     <span>
                         {{ i18n('New Token') }}
                     </span>
                     <span class="icon">
-                        <fa icon="plus"/>
+                        <fa :icon="faPlus"/>
                     </span>
                 </a>
             </p>
@@ -19,7 +19,7 @@
                     type="text"
                     :placeholder="i18n('Filter')">
                 <span class="icon is-small is-left">
-                    <fa icon="search"/>
+                    <fa :icon="faSearch"/>
                 </span>
                 <span v-if="query"
                     class="icon is-small is-right clear-button"
@@ -28,13 +28,13 @@
                 </span>
             </p>
             <p class="control">
-                <a class="button is-rounded is-small is-bold ml-2"
+                <a class="button is-rounded is-small ml-2 has-text-weight-bold"
                     @click="fetch()">
                     <span>
                         {{ i18n('Reload') }}
                     </span>
                     <span class="icon">
-                        <fa icon="sync"/>
+                        <fa :icon="faArrowsRotate"/>
                     </span>
                 </a>
             </p>
@@ -60,13 +60,10 @@
 
 <script>
 import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faPlus, faSync, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faArrowsRotate, faSearch } from '@fortawesome/free-solid-svg-icons';
 import Url from './Url.vue';
 import Token from './Token.vue';
 import TokenForm from './TokenForm.vue';
-
-library.add(faPlus, faSync, faSearch);
 
 export default {
     name: 'Tokens',
@@ -90,6 +87,9 @@ export default {
     emits: ['remove', 'update'],
 
     data: () => ({
+        faArrowsRotate,
+        faPlus,
+        faSearch,
         tokens: [],
         query: '',
         form: false,

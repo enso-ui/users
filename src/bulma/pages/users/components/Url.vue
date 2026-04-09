@@ -12,7 +12,7 @@
                     <a class="button"
                         @click="copy">
                         <span class="icon is-small">
-                            <fa icon="copy"/>
+                            <fa :icon="faCopy"/>
                         </span>
                     </a>
                 </div>
@@ -24,13 +24,10 @@
 
 <script>
 import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { focus, selectOnFocus } from '@enso-ui/directives';
 import { Modal } from '@enso-ui/modal/bulma';
 import Clipboard from '@enso-ui/clipboard';
-
-library.add(faCopy);
 
 export default {
     name: 'Url',
@@ -52,6 +49,10 @@ export default {
             required: true,
         },
     },
+
+    data: () => ({
+        faCopy,
+    }),
 
     methods: {
         copy() {

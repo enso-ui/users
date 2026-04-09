@@ -4,8 +4,7 @@
             <a class="navbar-item"
                 @click="visitProfile()"
                 v-if="isTouch">
-                <avatar class="is-30x30"
-                    :user="user"/>
+                <avatar :user="user"/>
             </a>
             <div :class="[
                 'navbar-item user-profile',
@@ -14,8 +13,7 @@
             ]" v-else>
                 <a class="navbar-link is-arrowless"
                     @click.stop="toggle()">
-                    <avatar class="is-30x30"
-                        :user="user"/>
+                    <avatar :user="user"/>
                     <span class="ml-1">
                         {{ user.person.appellative || user.person.name }}
                     </span>
@@ -37,22 +35,22 @@
                     <nav class="level navbar-item">
                         <div class="level-left">
                             <div class="level-item">
-                                <a class="button is-small is-success ml-1"
+                                <a class="button is-small ml-1"
                                     @click="visitProfile(); toggle()">
                                     <span>{{ i18n('Profile') }}</span>
                                     <span class="icon is-small">
-                                        <fa icon="eye"/>
+                                        <fa :icon="faEye"/>
                                     </span>
                                 </a>
                             </div>
                         </div>
                         <div class="level-right">
                             <div class="level-item">
-                                <a class="button is-small is-danger ml-3"
+                                <a class="button is-small ml-3"
                                     @click="logout(); toggle()">
                                     <span>{{ i18n('Logout') }}</span>
                                     <span class="icon is-small">
-                                        <fa icon="sign-out-alt"/>
+                                        <fa :icon="faRightFromBracket"/>
                                     </span>
                                 </a>
                             </div>
@@ -65,15 +63,13 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faEye, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { auth } from '@enso-ui/auth/src/pinia/auth';
 import { clickOutside } from '@enso-ui/directives';
 import CoreProfileControl from '../../../core/components/navbar/ProfileControl.vue';
 import Avatar from '../../pages/users/components/Avatar.vue';
 
-library.add(faEye, faSignOutAlt);
 export default {
     name: 'ProfileControl',
 
@@ -83,8 +79,15 @@ export default {
 
     inject: ['i18n'],
 
+    data: () => ({
+        faEye,
+        faRightFromBracket,
+    }),
+
     methods: {
-        ...mapActions('auth', ['logout']),
+        logout() {
+            return auth().logout();
+        },
     },
 };
 </script>
@@ -95,13 +98,41 @@ export default {
             border-radius: 290486px;
         }
 
+        .navbar-link {
+            transition: background-color 0.15s ease, color 0.15s ease;
+
+            .image.avatar {
+                img {
+                    height: 30px;
+                    max-height: 30px;
+                }
+            }
+        }
+
+        .navbar-dropdown {
+            min-width: 18.5rem;
+            background-color: var(--bulma-navbar-dropdown-background-color);
+            border: 1px solid var(--bulma-border);
+            box-shadow: none;
+            overflow: hidden;
+        }
+
         .user-panel {
-            width: 17em;
+            width: 100%;
+            background-color: var(--bulma-navbar-dropdown-background-color);
             .image.avatar.is-96x96 {
                 img {
                     max-height: 96px;
                 }
             }
+        }
+
+        .navbar-divider {
+            background-color: var(--bulma-border);
+        }
+
+        .level.navbar-item {
+            background-color: var(--bulma-scheme-main);
         }
     }
 </style>

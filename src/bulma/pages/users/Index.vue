@@ -1,6 +1,6 @@
 <template>
     <div>
-        <EnsoTable class="box is-paddingless raises-on-hover"
+        <EnsoTable class="box p-0"
             id="users"
             ref="table">
             <template #avatarId="{ row }">
