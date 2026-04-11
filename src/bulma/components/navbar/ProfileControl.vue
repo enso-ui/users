@@ -65,10 +65,10 @@
 <script>
 import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
 import { faEye, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { auth } from '@enso-ui/auth/src/pinia/auth';
 import { clickOutside } from '@enso-ui/directives';
 import CoreProfileControl from '../../../core/components/navbar/ProfileControl.vue';
 import Avatar from '../../pages/users/components/Avatar.vue';
-import { useStore } from '../../../utils/pinia';
 
 export default {
     name: 'ProfileControl',
@@ -86,7 +86,7 @@ export default {
 
     methods: {
         logout() {
-            return useStore('auth').logout();
+            return auth().logout();
         },
     },
 };
