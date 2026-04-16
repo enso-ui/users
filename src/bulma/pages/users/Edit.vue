@@ -3,10 +3,7 @@
         <div class="column is-four-fifths-desktop is-full-touch">
             <enso-form class="box"
                 ref="form"
-                @ready="
-                    ready = true;
-                    pivotParams.userGroups.id = $event.form.field('group_id').value;
-                ">
+                @ready="handleReady">
                 <template #group_id="props">
                     <form-field v-bind="props"
                         @update:model-value="pivotParams.userGroups.id = $event"/>
@@ -29,19 +26,24 @@
                         @focus="props.field.meta.readonly = false"
                         @blur="props.field.meta.readonly = true"
                         @update:model-value="passwordConfirmation = $event.target.value"
-                        @keydown="$emit('update');"
+                        @keydown="emit('update')"
                         v-if="!props.field.meta.hidden"/>
                 </template>
                 <template #actions-left>
                     <action tag="a"
-                        :button="personEdit"
-                        @click="$router.push({
-                            name: 'administration.people.edit',
-                            params: { person: $refs.form.param('personId') }
-                            }).catch(routerErrorHandler)"
+                        :button="{
+                            class: 'is-dark',
+                            icon: faUserTie,
+                            label: 'Edit Person',
+                        }"
+                        @click="editPerson"
                         v-if="ready"/>
                     <action tag="a"
-                        :button="passwordReset"
+                        :button="{
+                            class: 'is-dark',
+                            icon: faRotateLeft,
+                            label: 'Reset Password',
+                        }"
                         @click="resetPassword"
                         v-if="canAccess('administration.users.resetPassword')"/>
                 </template>
@@ -53,9 +55,9 @@
                         id="Tokens">
                         <div class="columns is-centered">
                             <div class="column is-half">
-                                <tokens :id="$route.params.user"
-                                    @update="count.Tokens = $refs.tokens.count"
-                                    ref="tokens"/>
+                                <tokens :id="route.params.user"
+                                    @update="count.Tokens = tokensRef.count"
+                                    ref="tokensRef"/>
                             </div>
                         </div>
                     </tab>
@@ -64,9 +66,9 @@
                         id="Sessions">
                         <div class="columns is-centered">
                             <div class="column is-half">
-                                <sessions :id="$route.params.user"
-                                    @update="count.Sessions = $refs.sessions.count"
-                                    ref="sessions"/>
+                                <sessions :id="route.params.user"
+                                    @update="count.Sessions = sessionsRef.count"
+                                    ref="sessionsRef"/>
                             </div>
                         </div>
                     </tab>
@@ -76,11 +78,10 @@
     </div>
 </template>
 
-<script>
-import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
-import {
-    faRotateLeft, faUserTie,
-} from '@fortawesome/free-solid-svg-icons';
+<script setup>
+import { computed, inject, reactive, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { faUserTie, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { EnsoForm, FormField, Action } from '@enso-ui/forms/bulma';
 import Accessories from '@enso-ui/accessories/bulma';
 import { Tab } from '@enso-ui/tabs/bulma';
@@ -89,75 +90,51 @@ import { useStore } from '../../../utils/pinia';
 import Tokens from './components/Tokens.vue';
 import Sessions from './components/Sessions.vue';
 
-export default {
-    name: 'Edit',
+defineOptions({ name: 'Edit' });
 
-    components: {
-        Accessories,
-        Action,
-        EnsoForm,
-        Fa,
-        FormField,
-        PasswordStrength,
-        Sessions,
-        Tab,
-        Tokens,
-    },
+const canAccess = inject('canAccess');
+const errorHandler = inject('errorHandler');
+const http = inject('http');
+const routeHelper = inject('route');
+const routerErrorHandler = inject('routerErrorHandler');
+const toastr = inject('toastr');
 
-    inject: [
-        'http', 'i18n', 'canAccess', 'errorHandler', 'route',
-        'routerErrorHandler', 'toastr',
-    ],
+const emit = defineEmits(['update']);
 
-    emits: ['update'],
+const route = useRoute();
+const router = useRouter();
 
-    data: () => ({
-        faRotateLeft,
-        faUserTie,
-        ready: false,
-        pivotParams: { userGroups: { id: null } },
-        password: null,
-        passwordConfirmation: null,
-        personEdit: {
-            class: 'is-dark',
-            icon: 'user-tie',
-            label: 'Edit Person',
-        },
-        passwordReset: {
-            class: 'is-dark',
-            icon: 'rotate-left',
-            label: 'Reset Password',
-        },
-    }),
+const form = ref(null);
+const tokensRef = ref(null);
+const sessionsRef = ref(null);
+const password = ref(null);
+const passwordConfirmation = ref(null);
+const ready = ref(false);
+const pivotParams = reactive({ userGroups: { id: null } });
 
-    computed: {
-        enums() {
-            return useStore('enums').enums;
-        },
-        user() {
-            return useStore('app').user;
-        },
-        canAccessSessions() {
-            return this.canAccess('administration.users.sessions.index')
-                && (`${this.user.role.id}` === this.enums.roles.Admin
-                || this.user.id === this.$route.params.user);
-        },
-        canAccessTokens() {
-            return this.canAccess('administration.users.tokens.index');
-        },
-    },
+const enums = computed(() => useStore('enums').enums);
+const user = computed(() => useStore('app').user);
 
-    methods: {
-        navigateToIndex() {
-            this.$nextTick(() => this.$router
-                .push({ name: 'administration.users.index' })
-                .catch(this.routerErrorHandler));
-        },
-        resetPassword() {
-            this.http.post(this.route('administration.users.resetPassword', this.$route.params))
-                .then(({ data }) => this.toastr.success(data.message))
-                .catch(this.errorHandler);
-        },
-    },
+const canAccessSessions = computed(() => canAccess('administration.users.sessions.index')
+    && (`${user.value.role.id}` === enums.value.roles.Admin
+    || user.value.id === route.params.user));
+
+const canAccessTokens = computed(() => canAccess('administration.users.tokens.index'));
+const personId = computed(() => form.value?.param('personId'));
+
+const handleReady = ({ form: ensoForm }) => {
+    ready.value = true;
+    pivotParams.userGroups.id = ensoForm.field('group_id').value;
+};
+
+const editPerson = () => router.push({
+    name: 'administration.people.edit',
+    params: { person: personId.value },
+}).catch(routerErrorHandler);
+
+const resetPassword = () => {
+    http.post(routeHelper('administration.users.resetPassword', route.params))
+        .then(({ data }) => toastr.success(data.message))
+        .catch(errorHandler);
 };
 </script>

@@ -15,16 +15,12 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { reactive } from 'vue';
+
 import { EnsoForm, FormField } from '@enso-ui/forms/bulma';
 
-export default {
-    name: 'Create',
+defineOptions({ name: 'Create' });
 
-    components: { EnsoForm, FormField },
-
-    data: () => ({
-        pivotParams: { userGroups: { id: null } },
-    }),
-};
+const pivotParams = reactive({ userGroups: { id: null } });
 </script>

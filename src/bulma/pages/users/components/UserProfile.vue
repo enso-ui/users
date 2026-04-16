@@ -49,7 +49,7 @@
                     </p>
                     <p class="control"
                         v-if="canAccess('core.impersonate.start')
-                            && !isSelfVisiting && !impersonating">
+                            && !isWebview && !isSelfVisiting && !impersonating">
                         <a class="button is-dark"
                             @click="startImpersonating">
                             <span class="icon">
@@ -187,6 +187,9 @@ export default {
         },
         isAuth() {
             return useStore('auth').isAuth;
+        },
+        isWebview() {
+            return useStore('app').isWebview;
         },
         isSelfVisiting() {
             return this.user.id === this.profile.id;
