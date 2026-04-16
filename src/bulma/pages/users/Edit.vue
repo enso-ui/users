@@ -33,36 +33,17 @@
                         v-if="!props.field.meta.hidden"/>
                 </template>
                 <template #actions-left>
-                    <div class="level-item">
-                        <a class="button is-warning"
-                            @click="$router.push({
-                                name: 'administration.people.edit',
-                                params: { person: $refs.form.param('personId') }
+                    <action tag="a"
+                        :button="personEdit"
+                        @click="$router.push({
+                            name: 'administration.people.edit',
+                            params: { person: $refs.form.param('personId') }
                             }).catch(routerErrorHandler)"
-                            v-if="ready">
-                            <span class="is-hidden-mobile">
-                                {{ i18n('Edit Person') }}
-                            </span>
-                            <span class="icon">
-                                <fa :icon="faUserTie"/>
-                            </span>
-                            <span class="is-hidden-mobile"/>
-                        </a>
-                    </div>
-                    <div class="level-item"
-                        v-if="canAccess('administration.users.resetPassword')">
-                        <a class="button is-black"
-                           @click="resetPassword"
-                           v-if="ready">
-                            <span class="is-hidden-mobile">
-                                {{ i18n('Reset Password') }}
-                            </span>
-                            <span class="icon">
-                                <fa :icon="faRotateRight"/>
-                            </span>
-                            <span class="is-hidden-mobile"/>
-                        </a>
-                    </div>
+                        v-if="ready"/>
+                    <action tag="a"
+                        :button="passwordReset"
+                        @click="resetPassword"
+                        v-if="canAccess('administration.users.resetPassword')"/>
                 </template>
             </enso-form>
             <accessories>
@@ -98,9 +79,9 @@
 <script>
 import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
 import {
-    faRotateRight, faUserTie,
+    faRotateLeft, faUserTie,
 } from '@fortawesome/free-solid-svg-icons';
-import { EnsoForm, FormField } from '@enso-ui/forms/bulma';
+import { EnsoForm, FormField, Action } from '@enso-ui/forms/bulma';
 import Accessories from '@enso-ui/accessories/bulma';
 import { Tab } from '@enso-ui/tabs/bulma';
 import { PasswordStrength } from '@enso-ui/auth';
@@ -113,6 +94,7 @@ export default {
 
     components: {
         Accessories,
+        Action,
         EnsoForm,
         Fa,
         FormField,
@@ -130,12 +112,22 @@ export default {
     emits: ['update'],
 
     data: () => ({
-        faRotateRight,
+        faRotateLeft,
         faUserTie,
         ready: false,
         pivotParams: { userGroups: { id: null } },
         password: null,
         passwordConfirmation: null,
+        personEdit: {
+            class: 'is-dark',
+            icon: 'user-tie',
+            label: 'Edit Person',
+        },
+        passwordReset: {
+            class: 'is-dark',
+            icon: 'rotate-left',
+            label: 'Reset Password',
+        },
     }),
 
     computed: {
