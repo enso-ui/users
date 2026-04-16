@@ -152,7 +152,8 @@ import { EnsoUploader } from '@enso-ui/uploader/bulma';
 import eventBus from '@enso-ui/ui/src/core/services/eventBus';
 import Divider from '@enso-ui/divider';
 import format from '@enso-ui/ui/src/modules/plugins/date-fns/format';
-import { useStore } from '../../../../utils/pinia';
+import { auth as useAuth } from '@enso-ui/auth/src/pinia/auth';
+import { app as useApp } from '@enso-ui/ui/src/pinia/app';
 
 export default {
     name: 'UserProfile',
@@ -177,19 +178,19 @@ export default {
 
     computed: {
         user() {
-            return useStore('app').user;
+            return useApp().user;
         },
         meta() {
-            return useStore('app').meta;
+            return useApp().meta;
         },
         impersonating() {
-            return useStore('app').impersonating;
+            return useApp().impersonating;
         },
         isAuth() {
-            return useStore('auth').isAuth;
+            return useAuth().isAuth;
         },
         isWebview() {
-            return useStore('app').isWebview;
+            return useApp().isWebview;
         },
         isSelfVisiting() {
             return this.user.id === this.profile.id;
@@ -204,7 +205,7 @@ export default {
 
     methods: {
         updateAvatar() {
-            useStore('app').updateAvatar();
+            useApp().updateAvatar();
         },
         dateFormat(date) {
             return date

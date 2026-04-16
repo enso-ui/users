@@ -1,5 +1,6 @@
 <script>
-import { useStore } from '../../../utils/pinia';
+import { app as useApp } from '@enso-ui/ui/src/pinia/app';
+import { layout as useLayout } from '@enso-ui/ui/src/pinia/layout';
 
 export default {
     name: 'CoreProfileControl',
@@ -18,7 +19,7 @@ export default {
             this.visible = !this.visible;
         },
         visitProfile() {
-            const app = useStore('app');
+            const app = useApp();
 
             this.$router.push({
                 name: 'administration.users.show',
@@ -28,8 +29,8 @@ export default {
     },
 
     render() {
-        const app = useStore('app');
-        const layout = useStore('layout');
+        const app = useApp();
+        const layout = useLayout();
 
         return this.$slots.default({
             user: app.user,

@@ -10,7 +10,7 @@
 <script>
 import 'v-tooltip/dist/v-tooltip.css';
 import { VTooltip } from 'v-tooltip';
-import { useStore } from '../../../../utils/pinia';
+import { app as useApp } from '@enso-ui/ui/src/pinia/app';
 
 export default {
     name: 'Avatar',
@@ -32,7 +32,7 @@ export default {
 
     computed: {
         avatarKey() {
-            return useStore('app').avatarKey;
+            return useApp().avatarKey;
         },
         label() {
             return this.tooltip
