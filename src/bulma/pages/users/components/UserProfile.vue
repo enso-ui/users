@@ -147,13 +147,13 @@ import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
 import {
     faArrowsRotate, faUpload, faUser, faCircleUser, faPen,
 } from '@fortawesome/free-solid-svg-icons';
-import Avatar from '@enso-ui/users/src/bulma/pages/users/components/Avatar.vue';
+import Avatar from './Avatar.vue';
 import { EnsoUploader } from '@enso-ui/uploader/bulma';
 import eventBus from '@enso-ui/ui/src/core/services/eventBus';
 import Divider from '@enso-ui/divider';
 import format from '@enso-ui/ui/src/modules/plugins/date-fns/format';
-import { auth as useAuth } from '@enso-ui/auth/src/pinia/auth';
-import { app as useApp } from '@enso-ui/ui/src/pinia/app';
+import { auth } from '@enso-ui/auth/src/pinia/auth';
+import { app } from '@enso-ui/ui/src/pinia/app';
 
 export default {
     name: 'UserProfile',
@@ -178,19 +178,19 @@ export default {
 
     computed: {
         user() {
-            return useApp().user;
+            return app().user;
         },
         meta() {
-            return useApp().meta;
+            return app().meta;
         },
         impersonating() {
-            return useApp().impersonating;
+            return app().impersonating;
         },
         isAuth() {
-            return useAuth().isAuth;
+            return auth().isAuth;
         },
         isWebview() {
-            return useApp().isWebview;
+            return app().isWebview;
         },
         isSelfVisiting() {
             return this.user.id === this.profile.id;
@@ -205,7 +205,7 @@ export default {
 
     methods: {
         updateAvatar() {
-            useApp().updateAvatar();
+            app().updateAvatar();
         },
         dateFormat(date) {
             return date

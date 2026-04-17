@@ -86,8 +86,8 @@ import { EnsoForm, FormField, Action } from '@enso-ui/forms/bulma';
 import Accessories from '@enso-ui/accessories/bulma';
 import { Tab } from '@enso-ui/tabs/bulma';
 import { PasswordStrength } from '@enso-ui/auth';
-import { enums as useEnums } from '@enso-ui/enums/src/pinia/enums';
-import { app as useApp } from '@enso-ui/ui/src/pinia/app';
+import { enums } from '@enso-ui/enums/src/pinia/enums';
+import { app } from '@enso-ui/ui/src/pinia/app';
 import Tokens from './components/Tokens.vue';
 import Sessions from './components/Sessions.vue';
 
@@ -113,11 +113,11 @@ const passwordConfirmation = ref(null);
 const ready = ref(false);
 const pivotParams = reactive({ userGroups: { id: null } });
 
-const enums = computed(() => useEnums().enums);
-const user = computed(() => useApp().user);
+const enumStore = computed(() => enums().enums);
+const user = computed(() => app().user);
 
 const canAccessSessions = computed(() => canAccess('administration.users.sessions.index')
-    && (`${user.value.role.id}` === enums.value.roles.Admin
+    && (`${user.value.role.id}` === enumStore.value.roles.Admin
     || user.value.id === route.params.user));
 
 const canAccessTokens = computed(() => canAccess('administration.users.tokens.index'));
