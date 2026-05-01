@@ -1,6 +1,6 @@
 {
     "name": "@enso-ui/users",
-    "version": "3.1.10",
+    "version": "3.1.11",
     "description": "User administration pages and profile panels for Enso UI.",
     "main": "bulma/index.js",
     "repository": {

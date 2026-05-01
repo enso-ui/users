@@ -55,7 +55,7 @@
                         id="Tokens">
                         <div class="columns is-centered">
                             <div class="column is-half">
-                                <tokens :id="route.params.user"
+                                <tokens :id="currentRoute.params.user"
                                     @update="count.Tokens = tokensRef.count"
                                     ref="tokensRef"/>
                             </div>
@@ -66,7 +66,7 @@
                         id="Sessions">
                         <div class="columns is-centered">
                             <div class="column is-half">
-                                <sessions :id="route.params.user"
+                                <sessions :id="currentRoute.params.user"
                                     @update="count.Sessions = sessionsRef.count"
                                     ref="sessionsRef"/>
                             </div>
@@ -96,13 +96,13 @@ defineOptions({ name: 'Edit' });
 const canAccess = inject('canAccess');
 const errorHandler = inject('errorHandler');
 const http = inject('http');
-const routeHelper = inject('route');
+const route = inject('route');
 const routerErrorHandler = inject('routerErrorHandler');
 const toastr = inject('toastr');
 
 const emit = defineEmits(['update']);
 
-const route = useRoute();
+const currentRoute = useRoute();
 const router = useRouter();
 
 const form = ref(null);
@@ -118,7 +118,7 @@ const user = computed(() => app().user);
 
 const canAccessSessions = computed(() => canAccess('administration.users.sessions.index')
     && (`${user.value.role.id}` === enumStore.value.roles.Admin
-    || user.value.id === route.params.user));
+    || user.value.id === currentRoute.params.user));
 
 const canAccessTokens = computed(() => canAccess('administration.users.tokens.index'));
 const personId = computed(() => form.value?.param('personId'));
@@ -134,7 +134,7 @@ const editPerson = () => router.push({
 }).catch(routerErrorHandler);
 
 const resetPassword = () => {
-    http.post(routeHelper('administration.users.resetPassword', route.params))
+    http.post(route('administration.users.resetPassword', currentRoute.params))
         .then(({ data }) => toastr.success(data.message))
         .catch(errorHandler);
 };
