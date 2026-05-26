@@ -1,11 +1,20 @@
 <template>
     <core-profile-control>
         <template #default="{ user, hide, isTouch, visitProfile, toggle, visible }">
-            <a class="navbar-item"
-                @click="visitProfile()"
+            <div class="user-profile is-touch"
                 v-if="isTouch">
-                <avatar :user="user"/>
-            </a>
+                <a class="navbar-item"
+                    @click="visitProfile()">
+                    <avatar :user="user"/>
+                </a>
+                <a class="navbar-item"
+                    :title="i18n('Logout')"
+                    @click="logout()">
+                    <span class="icon">
+                        <fa :icon="faRightFromBracket"/>
+                    </span>
+                </a>
+            </div>
             <div :class="[
                 'navbar-item user-profile',
                 { 'has-dropdown': !isTouch },
@@ -96,6 +105,16 @@ export default {
     .user-profile {
         img.is-rounded {
             border-radius: 290486px;
+        }
+
+        &.is-touch {
+            align-items: stretch;
+            display: flex;
+
+            > .navbar-item {
+                align-items: center;
+                display: flex;
+            }
         }
 
         .navbar-link {
