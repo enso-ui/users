@@ -40,7 +40,9 @@ export default {
                 : null;
         },
         link() {
-            return this.route('core.avatars.show', this.user.avatar.id);
+            const url = this.route('core.avatars.show', this.user.avatar.id);
+
+            return `${url}?version=${this.avatarKey}`;
         },
     },
 };
